@@ -1,0 +1,15 @@
+// quick op point on one nmos and one pmos, just to see the models load
+simulator lang=spectre
+global 0
+
+include "pdk_setup.scs"
+
+VDD (vdd 0) vsource dc=1.2
+VGN (gn 0)  vsource dc=0.6
+VGP (gp 0)  vsource dc=0.6
+
+XN (vdd gn 0 0)     nmos_dut w=1u l=60n
+XP (0 gp vdd vdd)   pmos_dut w=1u l=60n
+
+op_point dc
+save VDD:p

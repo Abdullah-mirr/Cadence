@@ -1,0 +1,45 @@
+// nmos gm/Id data, L = 60n 170n 280n 390n 500n, W = 1u, vds = 0.6
+// dc sweep of vgs -> Id
+// ac sweep of vgs at 100 MHz -> gm, gds, Cgg
+//   XA: ac on gate  -> Re(id) = gm, Im(ig) = w*Cgg
+//   XB: ac on drain -> Re(id) = gds
+// fT = gm / (2*pi*Cgg)
+// done with terminal currents because nch is a subckt in this pdk
+simulator lang=spectre
+global 0
+
+include "pdk_setup.scs"
+
+parameters vgs=0.6 vds=0.6 wval=1u lval=60n
+
+// copy A: dc data and gm, Cgg
+VGA (ga 0) vsource dc=vgs mag=1
+VDA (da 0) vsource dc=vds
+XA (da ga 0 0) nmos_dut w=wval l=lval
+
+// copy B: gds
+VGB (gb 0) vsource dc=vgs
+VDB (db 0) vsource dc=vds mag=1
+XB (db gb 0 0) nmos_dut w=wval l=lval
+
+save VGA:p VDA:p VDB:p
+
+setL060 alter param=lval value=60n
+dc_L060 dc param=vgs start=0 stop=1.2 step=5m
+ac_L060 ac param=vgs start=0 stop=1.2 step=5m freq=100M
+
+setL170 alter param=lval value=170n
+dc_L170 dc param=vgs start=0 stop=1.2 step=5m
+ac_L170 ac param=vgs start=0 stop=1.2 step=5m freq=100M
+
+setL280 alter param=lval value=280n
+dc_L280 dc param=vgs start=0 stop=1.2 step=5m
+ac_L280 ac param=vgs start=0 stop=1.2 step=5m freq=100M
+
+setL390 alter param=lval value=390n
+dc_L390 dc param=vgs start=0 stop=1.2 step=5m
+ac_L390 ac param=vgs start=0 stop=1.2 step=5m freq=100M
+
+setL500 alter param=lval value=500n
+dc_L500 dc param=vgs start=0 stop=1.2 step=5m
+ac_L500 ac param=vgs start=0 stop=1.2 step=5m freq=100M

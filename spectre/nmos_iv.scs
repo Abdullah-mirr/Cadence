@@ -1,0 +1,34 @@
+// nmos I-V
+// source/bulk at gnd, gate = vgs, drain = vds
+// Id is the current of VD (VD:p), sign is negative so take abs
+simulator lang=spectre
+global 0
+
+include "pdk_setup.scs"
+
+parameters vgs=0.6 vds=0.6 wval=1u lval=60n
+
+VG (g 0) vsource dc=vgs
+VD (d 0) vsource dc=vds
+X0 (d g 0 0) nmos_dut w=wval l=lval
+
+save VD:p
+
+// Id-Vds family: sweep vds, one curve per vgs
+setvgs04 alter param=vgs value=0.4
+idvds_vgs04 dc param=vds start=0 stop=1.2 step=5m
+setvgs06 alter param=vgs value=0.6
+idvds_vgs06 dc param=vds start=0 stop=1.2 step=5m
+setvgs08 alter param=vgs value=0.8
+idvds_vgs08 dc param=vds start=0 stop=1.2 step=5m
+setvgs10 alter param=vgs value=1.0
+idvds_vgs10 dc param=vds start=0 stop=1.2 step=5m
+setvgs12 alter param=vgs value=1.2
+idvds_vgs12 dc param=vds start=0 stop=1.2 step=5m
+
+// Id-Vgs: linear region (vds=50 mV) and saturation (vds=1.2 V)
+// The difference between the two gives DIBL (Vth shift with vds).
+setvds005 alter param=vds value=0.05
+idvgs_lin dc param=vgs start=0 stop=1.2 step=5m
+setvds12 alter param=vds value=1.2
+idvgs_sat dc param=vgs start=0 stop=1.2 step=5m

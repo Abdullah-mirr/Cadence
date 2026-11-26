@@ -1,0 +1,12 @@
+# simulator output, made again by go.sh
+results/*.raw/
+results/*.log
+results/*.env
+out/
+virtuoso_work/
+spectre/pdk_corner.scs
+spectre/*.log
+*.tar.gz
+REPORT.txt
+ERRORS.txt
+__pycache__/

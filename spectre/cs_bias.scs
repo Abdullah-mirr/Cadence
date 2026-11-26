@@ -1,0 +1,4 @@
+// cs_bias.scs : bias point for cs_amplifier.scs
+// Written by analyze_spectre.py: vbias gives V(out) = 0.60 V
+simulator lang=spectre
+parameters vbias=0.4674

@@ -1,0 +1,35 @@
+// CS amp with resistor load
+// first pass: dc sweep of vbias, script picks vbias for V(out) = vsup/2 (cs_bias.scs)
+// second pass: op, ac, noise, tran at that bias
+// note: sinedc must be set for tran, otherwise the sine sits at 0 V
+simulator lang=spectre
+global 0
+
+include "pdk_setup.scs"
+include "cs_bias.scs"
+
+parameters vsup=1.2 rl=10k wval=2u lval=180n cl=100f
+
+VDD (vdd 0) vsource dc=vsup
+VIN (inp 0) vsource dc=vbias mag=1 type=sine sinedc=vbias ampl=5m freq=1M
+RL  (vdd out) resistor r=rl
+X0  (out inp 0 0) nmos_dut w=wval l=lval
+CL  (out 0) capacitor c=cl
+
+save out inp VDD:p
+
+// DC operating point (look in the log for the bias current)
+op_point dc
+
+// Small-signal gain and bandwidth
+ac_resp ac start=1k stop=100G dec=20
+
+// Noise: output noise at node out, input-referred to source VIN
+// Results: "out" in V/sqrt(Hz), "in" (input-referred) in V/sqrt(Hz)
+noise_resp (out 0) noise start=1 stop=10G dec=10 iprobe=VIN
+
+// Transient: 5 mV, 1 MHz sine on top of vbias
+tran_resp tran stop=5u maxstep=5n
+
+// DC transfer curve (kept last, it sweeps vbias)
+dc_sweep dc param=vbias start=0 stop=1.2 step=2m

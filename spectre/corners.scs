@@ -1,0 +1,21 @@
+// nmos Id-Vgs and pmos Isd-Vsg at |Vds| = 1.2, run once per corner (tt ss ff)
+// pdk_corner.scs is pdk_setup.scs with the section swapped
+simulator lang=spectre
+global 0
+
+include "pdk_corner.scs"
+
+parameters vgs=0.6 vsg=0.6
+
+VDN (dn 0) vsource dc=1.2
+VGN (gn 0) vsource dc=vgs
+XN  (dn gn 0 0) nmos_dut w=1u l=60n
+
+VSP (sp 0) vsource dc=1.2
+VGP (gp 0) vsource dc=1.2-vsg
+XP  (0 gp sp sp) pmos_dut w=1u l=60n
+
+save VDN:p VSP:p
+
+nmos_idvgs dc param=vgs start=0 stop=1.2 step=5m
+pmos_isdvsg dc param=vsg start=0 stop=1.2 step=5m

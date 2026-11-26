@@ -1,0 +1,43 @@
+// pmos I-V + small signal data
+// source and bulk on vsup, gate = vsup - vsg, drain = vsup - vsd
+// so vsg / vsd are the real source-gate and source-drain voltages
+simulator lang=spectre
+global 0
+
+include "pdk_setup.scs"
+
+parameters vsup=1.2 vsg=0.6 vsd=0.6 wval=1u lval=60n
+
+VS (s 0) vsource dc=vsup
+VG (g 0) vsource dc=vsup-vsg
+VD (d 0) vsource dc=vsup-vsd
+XP (d g s s) pmos_dut w=wval l=lval
+
+// Copy used for small-signal data: gate driven with ac=1 V
+VGA (ga 0) vsource dc=vsup-vsg mag=1
+VDA (da 0) vsource dc=vsup-vsd
+XPA (da ga s s) pmos_dut w=wval l=lval
+
+// Copy used for gds: drain driven with ac=1 V
+VDB (db 0) vsource dc=vsup-vsd mag=1
+XPB (db g s s) pmos_dut w=wval l=lval
+
+save VD:p VGA:p VDA:p VDB:p
+
+// Isd-Vsd family: one curve per vsg
+setvsg04 alter param=vsg value=0.4
+isdvsd_vsg04 dc param=vsd start=0 stop=1.2 step=5m
+setvsg06 alter param=vsg value=0.6
+isdvsd_vsg06 dc param=vsd start=0 stop=1.2 step=5m
+setvsg08 alter param=vsg value=0.8
+isdvsd_vsg08 dc param=vsd start=0 stop=1.2 step=5m
+setvsg10 alter param=vsg value=1.0
+isdvsd_vsg10 dc param=vsd start=0 stop=1.2 step=5m
+setvsg12 alter param=vsg value=1.2
+isdvsd_vsg12 dc param=vsd start=0 stop=1.2 step=5m
+
+// Isd-Vsg at vsd = 0.6 V, plus small-signal sweep at 100 MHz
+// From the ac sweep: gm = Re(i_d), Cgg = Im(i_g)/(2*pi*f), gds = Re(i_d) of copy B
+setvsd06 alter param=vsd value=0.6
+isdvsg dc param=vsg start=0 stop=1.2 step=5m
+ac_pmos ac param=vsg start=0 stop=1.2 step=5m freq=100M

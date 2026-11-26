@@ -1,0 +1,16 @@
+  [PASS   ] NMOS threshold voltage                   0.215 V (expected 0.15 to 0.7)
+  [PASS   ] NMOS subthreshold swing                  97.6 mV/dec (expected 60 to 130)
+  [PASS   ] NMOS DIBL                                141 mV/V (expected 0 to 300)
+  [PASS   ] NMOS max gm/Id, L=60n                    24.1 1/V (expected 15 to 40)
+  [PASS   ] NMOS max fT, L=60n                       238 GHz (expected 10 to 1000)
+  [PASS   ] fT falls with longer L                   fT(60n) > fT(500n)
+  [PASS   ] gain rises with longer L                 gm/gds(500n) > gm/gds(60n) at gm/Id = 15
+  [PASS   ] PMOS threshold voltage |Vth|             0.259 V (expected 0.15 to 0.8)
+  [PASS   ] PMOS / NMOS width ratio                  2.95 x (expected 1.1 to 6)
+  [PASS   ] CS amplifier bias                        0.467 V (expected 0.2 to 1)
+  [PASS   ] CS amplifier gain                        5.46 V/V (expected 1.5 to 60)
+  [PASS   ] Noise: 1/f corner found                  flicker meets thermal floor
+  [PASS   ] Corners: NMOS Id ff > tt > ss            on-current order
+  [PASS   ] Corners: PMOS Id ff > tt > ss            on-current order
+
+CHECKS: 14 PASS, 0 CHECK, 0 MISSING

@@ -1,0 +1,16 @@
+// model file + section, device names
+// go.sh fills this in. On the lab server it is the TSMC 65 GP file,
+// crn65gplus_2d5_lk_v1d0.scs, section tt, devices nch / pch
+simulator lang=spectre
+
+include "/EDIT/THIS/PATH/models.scs" section=tt
+
+subckt nmos_dut (d g s b)
+parameters w=1u l=60n
+    M0 (d g s b) nch w=w l=l
+ends nmos_dut
+
+subckt pmos_dut (d g s b)
+parameters w=1u l=60n
+    M0 (d g s b) pch w=w l=l
+ends pmos_dut
