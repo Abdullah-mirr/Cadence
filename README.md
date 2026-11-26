@@ -98,5 +98,4 @@ If you get `$'\r': command not found`, the files went through Windows:
 
 ## To do
 
-- screenshots of the library and ADE runs (list in `virtuoso/LIBRARY_GUIDE.md`)
 - temperature and supply corners
